@@ -18,8 +18,9 @@ sudo truncate -s 0 -c $MYSQL_LOG
 echo
 echo ":: RESTART SERVICES ====>"
 
-# TODO: serviceのbuildが必要, buildをどのようにしているか調べる
-# ex: cd webaap/golang && make && cd ..
+cd "$HOME/private_isu/webapp/golang" && make
+cd "$HOME/private_isu"
+
 sudo systemctl daemon-reload
 sudo systemctl restart isu-go
 
