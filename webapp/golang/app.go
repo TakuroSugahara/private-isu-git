@@ -212,12 +212,13 @@ func makePosts(results []Post, csrfToken string, allComments bool) ([]Post, erro
 
 		p.CSRFToken = csrfToken
 
-		if p.User.DelFlg == 0 {
-			posts = append(posts, p)
-		}
-		if len(posts) >= postsPerPage {
-			break
-		}
+		posts = append(posts, p)
+		// if p.User.DelFlg == 0 {
+		// 	posts = append(posts, p)
+		// }
+		// if len(posts) >= postsPerPage {
+		// 	break
+		// }
 	}
 
 	return posts, nil
@@ -559,7 +560,10 @@ func getPostsID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	results := []Post{}
-	err = db.Select(&results, "SELECT * FROM `posts` WHERE `id` = ?", pid)
+
+  // err = db.Select(&results, "SELECT * FROM `posts` WHERE `id` = ?", pid)
+  err = db.Select(&results, "SELECT p.* FROM `posts` AS p JOIN `users` AS u ON (p.user_id = u.id) WHERE u.del_flg = 0 AND p.id = ?", pid)
+
 	if err != nil {
 		log.Print(err)
 		return
